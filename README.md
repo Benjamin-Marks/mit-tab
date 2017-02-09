@@ -1,9 +1,12 @@
-[![Build Status](https://travis-ci.org/jolynch/mit-tab.svg?branch=master)](https://travis-ci.org/jolynch/mit-tab)
-
-MIT-TAB
+MIT-TAB on App Engine
 =======
-A web application that allows APDA american debate tournaments to correctly tab
-and manage their tournaments. You add the following information:
+This is a fork of [jolynch's mit-tab](https://github.com/jolynch/mit-tab), created
+by Ben Marks from W&M. Joey did an amazing job creating mit-tab, and this project
+seeks to build on his work by making it easy and free for schools to set up their
+own tournaments, while also updating mit-tab's backend.
+
+mit-tab is a web application that allows APDA american debate tournaments to
+correctly tab and manage their tournaments. You add the following information:
 
 1. Schools
 2. Debaters
@@ -27,8 +30,9 @@ you.
 
 Installation + Running
 ----------------------
-Currently the installation consists of downloading the code, installing
-requirements and then manually running the server. So:
+Just download the code, and [deploy it to App Engine](https://cloud.google.com/appengine/docs/python/tools/uploadinganapp) like any other App!
+
+To run the code locally:
 ```
 git clone <mit-tab repo> mit-tab
 cd mit-tab
@@ -41,13 +45,6 @@ python manage.py runserver
 ```
 
 At this time it is recommended to run v2.0 (Django 1.6)
-
-Production Setup
-----------------
-Do not attempt to run the django server in a production environment, you will
-be very sad. Instead checkout:
-
-[The production instructions](mittab/production_setup)
 
 Why Should I Use This?
 ----------------------
