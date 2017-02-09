@@ -7,6 +7,7 @@ class RoundAdminForm(forms.ModelForm):
 
     class Meta:
         model = Round
+        exclude = ['']
 
 class RoundAdmin(admin.ModelAdmin):
     form = RoundAdminForm

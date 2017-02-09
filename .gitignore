@@ -1,5 +1,9 @@
 *.py[cod]
 
+# Vendored Libs and Static Files
+lib/
+static/
+
 # C extensions
 *.so
 

@@ -1,5 +1,4 @@
 from django.db import models
-from localflavor.us.models import PhoneNumberField
 from django.core.exceptions import ValidationError
 
 class TabSettings(models.Model):
@@ -52,7 +51,8 @@ class Debater(models.Model):
         (VARSITY, u'Varsity'),
         (NOVICE, u'Novice'),
     )
-    phone = PhoneNumberField(blank=True)
+    # TODO(benjaminmarks): Either fix field verification or remove wholesale
+    phone = models.CharField(blank=True)
     provider = models.CharField(max_length=40, blank=True)
     novice_status = models.IntegerField(choices=NOVICE_CHOICES)
     def __unicode__(self):
@@ -97,7 +97,8 @@ class Judge(models.Model):
     name = models.CharField(max_length=30, unique = True)
     rank = models.DecimalField(max_digits=4, decimal_places=2)
     schools = models.ManyToManyField(School)
-    phone = PhoneNumberField(blank=True)
+    # TODO(benjaminmarks): Either fix field verification or remove wholesale
+    phone = models.CharField(blank=True)
     provider = models.CharField(max_length=40, blank=True)
     def __unicode__(self):
         return self.name

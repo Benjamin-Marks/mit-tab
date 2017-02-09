@@ -2,8 +2,9 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import Http404,HttpResponse,HttpResponseRedirect
 from django.contrib.auth.decorators import permission_required
-from django.utils import simplejson
-from django.db import transaction
+import json
+# TODO(benjaminmarks): Re-implement atomicity
+#from django.db import transaction
 from errors import *
 from mittab.libs.errors import *
 from models import *
@@ -38,7 +39,7 @@ def swap_judges_in_round(request, src_round, src_judge, dest_round, dest_judge):
     except Exception as e:
         print "ARG ", e
         data = {"success":False}
-    data = simplejson.dumps(data)
+    data = json.dumps(data)
     return HttpResponse(data, mimetype='application/json')
 
 @permission_required('tab.tab_settings.can_change', login_url="/403/")
@@ -82,7 +83,7 @@ def swap_teams_in_round(request, src_round, src_team, dest_round, dest_team):
     except Exception as e:
         print "Unable to swap teams: ", e
         data = {'success':False}
-    data = simplejson.dumps(data)
+    data = json.dumps(data)
     return HttpResponse(data, mimetype='application/json')
 
 
@@ -96,10 +97,11 @@ def pair_round(request):
         try:
             TabSettings.set('pairing_released', 0)
             backup.backup_round("round_%i_before_pairing.db" % (current_round_number))
-            with transaction.atomic():
-                tab_logic.pair_round()
-                current_round.value = current_round.value + 1
-                current_round.save()
+            # TODO(benjaminmarks): Re-implement atomicity
+            # with transaction.atomic():
+            tab_logic.pair_round()
+            current_round.value = current_round.value + 1
+            current_round.save()
             backup.backup_round("round_%i_after_pairing.db" % (current_round_number))
         except Exception as exp:
             traceback.print_exc(file=sys.stdout)
@@ -360,7 +362,7 @@ def assign_judge(request, round_id, judge_id, remove_id=None):
     except Exception as e:
         print "Failed to assign judge: ", e
         data = {"success":False}
-    data = simplejson.dumps(data)
+    data = json.dumps(data)
     return HttpResponse(data, mimetype='application/json')
 
 @permission_required('tab.tab_settings.can_change', login_url="/403/")
@@ -379,14 +381,14 @@ def remove_judge(request, round_id, judge_id):
     except Exception as e:
         print "Failed to assign judge: ", e
         data = {"success":False}
-    data = simplejson.dumps(data)
+    data = json.dumps(data)
     return HttpResponse(data, mimetype='application/json')
 
 def get_pairing_released(request):
     released = TabSettings.get("pairing_released", 0)
     data = {"success": True,
             "pairing_released": released == 1}
-    data = simplejson.dumps(data)
+    data = json.dumps(data)
     return HttpResponse(data, mimetype='application/json')
 
 def toggle_pairing_released(request):
@@ -394,7 +396,7 @@ def toggle_pairing_released(request):
     TabSettings.set("pairing_released", int(not old))
     data = {"success": True,
             "pairing_released": int(not old) == 1}
-    data = simplejson.dumps(data)
+    data = json.dumps(data)
     return HttpResponse(data, mimetype='application/json')
 
 """dxiao: added a html page for showing tab for the current round.

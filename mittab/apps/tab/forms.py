@@ -19,10 +19,12 @@ class UploadDataForm(forms.Form):
 class SchoolForm(forms.ModelForm):
     class Meta:
         model = School
+        exclude = ['']
 
 class RoomForm(forms.ModelForm):
     class Meta:
         model = Room
+        exclude = ['']
 
 class JudgeForm(forms.ModelForm):
     schools = forms.ModelMultipleChoiceField(queryset=School.objects.all(), 
@@ -64,6 +66,7 @@ class JudgeForm(forms.ModelForm):
                 
     class Meta:
         model = Judge
+        exclude = ['']
         
 
 class TeamForm(forms.ModelForm):
@@ -84,6 +87,7 @@ class TeamForm(forms.ModelForm):
     
     class Meta:
         model = Team
+        exclude = ['']
 
 class TeamEntryForm(forms.ModelForm):
     number_scratches = forms.IntegerField(label="How many initial scratches?", initial=0)
@@ -98,6 +102,7 @@ class TeamEntryForm(forms.ModelForm):
 
     class Meta:
         model = Team
+        exclude = ['']
         
 class ScratchForm(forms.ModelForm):
     team = forms.ModelChoiceField(queryset=Team.objects.all())
@@ -105,10 +110,12 @@ class ScratchForm(forms.ModelForm):
     scratch_type = forms.ChoiceField(choices=Scratch.TYPE_CHOICES)
     class Meta:
         model = Scratch
+        exclude = ['']
         
 class DebaterForm(forms.ModelForm):
     class Meta:
         model = Debater
+        exclude = ['']
         
         
 def validate_speaks(value):

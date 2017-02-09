@@ -7,7 +7,8 @@ from forms import SchoolForm, RoomForm, UploadDataForm, ScratchForm
 from django.db import models
 from models import *
 from mittab.libs.tab_logic import TabFlags
-from mittab.libs.data_import import import_judges, import_rooms, import_teams
+# TODO(benjaminmarks): Fix xlrd
+# from mittab.libs.data_import import import_judges, import_rooms, import_teams
 
 def index(request):
     number_teams = Team.objects.count()
@@ -275,6 +276,8 @@ def view_scratches(request):
                               'item_list':c_scratches}, context_instance=RequestContext(request))
 
 def upload_data(request):
+    # TODO(benjaminmarks): Fix xlrd
+    """
     if request.method == 'POST':
       form = UploadDataForm(request.POST, request.FILES)
       if form.is_valid():
@@ -312,8 +315,9 @@ def upload_data(request):
                                   context_instance=RequestContext(request))
     else:
       form = UploadDataForm()
+    """
     return render_to_response('data_entry.html', 
-                              {'form': form,
-                               'title': 'Upload Input Files'}, 
+                              {'form': None,
+                               'title': 'Upload Input Files - BROKEN'}, 
                                context_instance=RequestContext(request))
     

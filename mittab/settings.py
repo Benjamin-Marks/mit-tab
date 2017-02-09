@@ -25,7 +25,7 @@ DEBUG = True
 TEMPLATE_DEBUG = True
 
 TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'mittab', 'apps', 'tab', 'templates')
+#    os.path.join(BASE_DIR, 'mittab', 'apps', 'tab', 'templates')
 )
 
 ALLOWED_HOSTS = []
@@ -40,7 +40,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'south',
     'mittab.apps.tab',
 )
 
@@ -51,8 +50,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'mittab.apps.tab.middleware.Login',
-    'django.middleware.transaction.TransactionMiddleware', #Be careful about ordering
+    'mittab.apps.tab.middleware.Login', #Be careful about ordering
 )
 
 ROOT_URLCONF = 'mittab.urls'
@@ -63,13 +61,28 @@ WSGI_APPLICATION = 'mittab.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'mittab', 'pairing_db.sqlite3'),
-        'ATOMIC_REQUESTS': True,
+import os
+if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine'):
+    # Running on production App Engine, so use a Google Cloud SQL database.
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'HOST': '/cloudsql/mit-tab:us-east1:mit-tab',
+            'NAME': 'mittab',
+            'USER': 'root',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'mittab',
+            'USER': '<your-database-user>',
+            'PASSWORD': '<your-database-password>',
+            'HOST': '<your-database-host>',
+            'PORT': '3306',
+        }
+    }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
@@ -88,11 +101,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
+STATIC_ROOT='static'
 STATIC_URL = '/static/'
-
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'mittab', 'static'),
-)
 
 
 TEMPLATE_CONTEXT_PROCESSORS = (
